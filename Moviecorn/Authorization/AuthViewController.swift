@@ -9,6 +9,7 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     
+    
     // MARK: - Layout elements
     
     private var authLabel: UILabel = {
@@ -20,18 +21,27 @@ final class AuthViewController: UIViewController {
         return authLabel
     }()
     
-    private var loginTextField: UITextField = {
-        let loginTextField = UITextField(frame: CGRect(x: 0, y: 0, width: 300, height: 40))
-        loginTextField.placeholder = "Login"
-        loginTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        loginTextField.layer.cornerRadius = 8.0
-        loginTextField.layer.masksToBounds = true
-        loginTextField.autocorrectionType = UITextAutocorrectionType.no
-        loginTextField.keyboardType = UIKeyboardType.default
-        loginTextField.font = UIFont.systemFont(ofSize: 15)
-        loginTextField.clearButtonMode = UITextField.ViewMode.whileEditing
-        loginTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        return loginTextField
+    private var errorLabel: UILabel = {
+        let errorLabel = UILabel()
+        errorLabel.text = "Ошибка ввода"
+        errorLabel.textColor = .red
+        errorLabel.font = UIFont.systemFont(ofSize: 16)
+        errorLabel.textAlignment = .center
+        return errorLabel
+    }()
+    
+    private var usernameTextField: UITextField = {
+        let usernameTextField = UITextField(frame: CGRect(x: 0, y: 0, width: 300, height: 40))
+        usernameTextField.placeholder = "Username"
+        usernameTextField.borderStyle = UITextField.BorderStyle.roundedRect
+        usernameTextField.layer.cornerRadius = 8.0
+        usernameTextField.layer.masksToBounds = true
+        usernameTextField.autocorrectionType = UITextAutocorrectionType.no
+        usernameTextField.keyboardType = UIKeyboardType.default
+        usernameTextField.font = UIFont.systemFont(ofSize: 15)
+        usernameTextField.clearButtonMode = UITextField.ViewMode.whileEditing
+        usernameTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        return usernameTextField
     }()
     
     private var passwordTextField: UITextField = {
@@ -63,11 +73,17 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        errorLabel.isHidden = true
         
         initAuthViewController()
+
     }
     
     // MARK: - Layout methods
+    
+    func clearTextField (textField: UITextField) {
+        textField.text = ""
+    }
     
     private func initAuthViewController() {
         
@@ -76,8 +92,11 @@ final class AuthViewController: UIViewController {
         authLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(authLabel)
         
-        loginTextField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(loginTextField)
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(errorLabel)
+        
+        usernameTextField.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(usernameTextField)
         
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(passwordTextField)
@@ -91,14 +110,22 @@ final class AuthViewController: UIViewController {
             authLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             authLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             authLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            loginTextField.topAnchor.constraint(equalTo: authLabel.bottomAnchor, constant: 150),
-            loginTextField.widthAnchor.constraint(equalToConstant: 300),
-            loginTextField.heightAnchor.constraint(equalToConstant: 40),
+            
+            errorLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            errorLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            errorLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 125),
+            errorLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            usernameTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            usernameTextField.topAnchor.constraint(equalTo: authLabel.bottomAnchor, constant: 150),
+            usernameTextField.widthAnchor.constraint(equalToConstant: 300),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 40),
+            
             passwordTextField.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 30),
+            passwordTextField.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 30),
             passwordTextField.widthAnchor.constraint(equalToConstant: 300),
             passwordTextField.heightAnchor.constraint(equalToConstant: 40),
+            
             button.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             button.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 70),
             button.widthAnchor.constraint(equalToConstant: 300),
@@ -108,23 +135,30 @@ final class AuthViewController: UIViewController {
     
     @objc private func didTapLoginButton(_ sender: UIButton) {
         
-        print("Hello")
+        var usernameText: String = usernameTextField.text ?? ""
+        var passwordText: String = passwordTextField.text ?? ""
         
-        let alert = UIAlertController(
-            title: "Что то не так!",
-            message: "Попробуйте еще раз",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(
-            title: "Да",
-            style: .default,
-            handler: { [weak self] _ in
-                guard let self = self else { return }
-                //                 self.logOut()
-                self.present(alert, animated: true)
-            }))
-        alert.addAction(UIAlertAction(
-            title: "Нет",
-            style: .default))
-        self.present(alert, animated: true)
+        if  passwordText == password && usernameText == username {
+            
+            guard let window = UIApplication.shared.windows.first else {
+                assertionFailure("Invalid Configuration")
+                return
+            }
+            let movieTableViewController = MovieTableViewController()
+            window.rootViewController = movieTableViewController
+            UserDefaults.standard.set(true, forKey: "LOGGED_IN")
+        } else {
+                    let alert = UIAlertController(
+                        title: "Что то не так!",
+                        message: "Попробуйте еще раз",
+                        preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(
+                        title: "OK",
+                        style: .default))
+                    self.present(alert, animated: true)
+            clearTextField(textField: usernameTextField)
+            clearTextField(textField: passwordTextField)
+        }
     }
 }
+

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		A329A0602A26786F0023CE35 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A05F2A26786F0023CE35 /* AppDelegate.swift */; };
 		A329A0622A26786F0023CE35 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0612A26786F0023CE35 /* SceneDelegate.swift */; };
-		A329A0642A26786F0023CE35 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0632A26786F0023CE35 /* ViewController.swift */; };
-		A329A0672A26786F0023CE35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A329A0652A26786F0023CE35 /* Main.storyboard */; };
 		A329A0692A2678750023CE35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A329A0682A2678750023CE35 /* Assets.xcassets */; };
 		A329A06C2A2678750023CE35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A329A06A2A2678750023CE35 /* LaunchScreen.storyboard */; };
 		A329A0742A2680510023CE35 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0732A2680510023CE35 /* AuthViewController.swift */; };
@@ -18,14 +16,16 @@
 		A329A0782A2680D00023CE35 /* MovieDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0772A2680D00023CE35 /* MovieDescriptionViewController.swift */; };
 		A329A07A2A26875D0023CE35 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0792A26875D0023CE35 /* UIColor+Extensions.swift */; };
 		A329A07C2A274BCD0023CE35 /* MovieTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A07B2A274BCD0023CE35 /* MovieTableCell.swift */; };
+		A329A0822A27968A0023CE35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A329A0812A27968A0023CE35 /* Main.storyboard */; };
+		A329A0842A27A84D0023CE35 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0832A27A84D0023CE35 /* Constants.swift */; };
+		A329A0862A27CF1F0023CE35 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0852A27CF1F0023CE35 /* SplashViewController.swift */; };
+		A329A0882A27D0300023CE35 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329A0872A27D0300023CE35 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A329A05C2A26786F0023CE35 /* Moviecorn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moviecorn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A329A05F2A26786F0023CE35 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A329A0612A26786F0023CE35 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A329A0632A26786F0023CE35 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		A329A0662A26786F0023CE35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A329A0682A2678750023CE35 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A329A06B2A2678750023CE35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A329A06D2A2678750023CE35 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -34,6 +34,10 @@
 		A329A0772A2680D00023CE35 /* MovieDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDescriptionViewController.swift; sourceTree = "<group>"; };
 		A329A0792A26875D0023CE35 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		A329A07B2A274BCD0023CE35 /* MovieTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableCell.swift; sourceTree = "<group>"; };
+		A329A0812A27968A0023CE35 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		A329A0832A27A84D0023CE35 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A329A0852A27CF1F0023CE35 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		A329A0872A27D0300023CE35 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +72,6 @@
 			children = (
 				A329A05F2A26786F0023CE35 /* AppDelegate.swift */,
 				A329A0612A26786F0023CE35 /* SceneDelegate.swift */,
-				A329A0632A26786F0023CE35 /* ViewController.swift */,
-				A329A0652A26786F0023CE35 /* Main.storyboard */,
 				A329A0682A2678750023CE35 /* Assets.xcassets */,
 				A329A06A2A2678750023CE35 /* LaunchScreen.storyboard */,
 				A329A06D2A2678750023CE35 /* Info.plist */,
@@ -77,6 +79,7 @@
 				A329A07D2A276ADD0023CE35 /* MovieTableView */,
 				A329A07F2A276B150023CE35 /* MovieDescription */,
 				A329A0802A276B280023CE35 /* Helpers */,
+				A329A0812A27968A0023CE35 /* Main.storyboard */,
 			);
 			path = Moviecorn;
 			sourceTree = "<group>";
@@ -93,7 +96,9 @@
 		A329A07E2A276AFA0023CE35 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
+				A329A0852A27CF1F0023CE35 /* SplashViewController.swift */,
 				A329A0732A2680510023CE35 /* AuthViewController.swift */,
+				A329A0872A27D0300023CE35 /* AuthService.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";
@@ -110,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				A329A0792A26875D0023CE35 /* UIColor+Extensions.swift */,
+				A329A0832A27A84D0023CE35 /* Constants.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -172,9 +178,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A329A0822A27968A0023CE35 /* Main.storyboard in Resources */,
 				A329A06C2A2678750023CE35 /* LaunchScreen.storyboard in Resources */,
 				A329A0692A2678750023CE35 /* Assets.xcassets in Resources */,
-				A329A0672A26786F0023CE35 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,12 +191,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A329A0842A27A84D0023CE35 /* Constants.swift in Sources */,
 				A329A0762A2680810023CE35 /* MovieTableViewController.swift in Sources */,
 				A329A0742A2680510023CE35 /* AuthViewController.swift in Sources */,
+				A329A0862A27CF1F0023CE35 /* SplashViewController.swift in Sources */,
 				A329A0782A2680D00023CE35 /* MovieDescriptionViewController.swift in Sources */,
-				A329A0642A26786F0023CE35 /* ViewController.swift in Sources */,
 				A329A07A2A26875D0023CE35 /* UIColor+Extensions.swift in Sources */,
 				A329A0602A26786F0023CE35 /* AppDelegate.swift in Sources */,
+				A329A0882A27D0300023CE35 /* AuthService.swift in Sources */,
 				A329A0622A26786F0023CE35 /* SceneDelegate.swift in Sources */,
 				A329A07C2A274BCD0023CE35 /* MovieTableCell.swift in Sources */,
 			);
@@ -199,14 +207,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		A329A0652A26786F0023CE35 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A329A0662A26786F0023CE35 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		A329A06A2A2678750023CE35 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

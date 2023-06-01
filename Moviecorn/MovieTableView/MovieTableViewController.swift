@@ -10,7 +10,7 @@ import UIKit
 final class MovieTableViewController : UIViewController {
     
     // MARK: - Layout elements
-    
+
     let tableView = UITableView()
     
     private let photosName: [String] = Array(0..<14).map{ "\($0)" }
@@ -81,5 +81,17 @@ extension MovieTableViewController {
 extension MovieTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TO DO
+        let rootVC = MovieDescriptionViewController()
+        let navVC = UINavigationController(rootViewController: rootVC)
+        navVC.modalPresentationStyle = .fullScreen
+        
+        present(navVC, animated: true)
+        
+//        guard let window = UIApplication.shared.windows.first else {
+//            assertionFailure("Invalid Configuration")
+//            return
+//        }
+//        let movieDescriptionViewController = MovieDescriptionViewController()
+//        window.rootViewController = movieDescriptionViewController
     }
 }
