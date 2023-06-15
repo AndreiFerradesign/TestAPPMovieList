@@ -9,7 +9,6 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     
-    
     // MARK: - Layout elements
     
     private var authLabel: UILabel = {
@@ -68,15 +67,12 @@ final class AuthViewController: UIViewController {
         return button
     }()
     
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         errorLabel.isHidden = true
-        
         initAuthViewController()
-
     }
     
     // MARK: - Layout methods
@@ -133,10 +129,12 @@ final class AuthViewController: UIViewController {
         ])
     }
     
+    // MARK: - Actions
+    
     @objc private func didTapLoginButton(_ sender: UIButton) {
         
-        var usernameText: String = usernameTextField.text ?? ""
-        var passwordText: String = passwordTextField.text ?? ""
+        let usernameText: String = usernameTextField.text ?? ""
+        let passwordText: String = passwordTextField.text ?? ""
         
         if  passwordText == password && usernameText == username {
             
@@ -144,18 +142,23 @@ final class AuthViewController: UIViewController {
                 assertionFailure("Invalid Configuration")
                 return
             }
+            
             let movieTableViewController = MovieTableViewController()
             window.rootViewController = movieTableViewController
+            
             UserDefaults.standard.set(true, forKey: "LOGGED_IN")
+            
         } else {
-                    let alert = UIAlertController(
-                        title: "Что то не так!",
-                        message: "Попробуйте еще раз",
-                        preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(
-                        title: "OK",
-                        style: .default))
-                    self.present(alert, animated: true)
+            
+            let alert = UIAlertController(
+                title: "Что то не так!",
+                message: "Попробуйте еще раз",
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(
+                title: "OK",
+                style: .default))
+            self.present(alert, animated: true)
+            
             clearTextField(textField: usernameTextField)
             clearTextField(textField: passwordTextField)
         }

@@ -9,34 +9,40 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
+    // MARK: - Layout elements
+    
     lazy var indicatorView: UIActivityIndicatorView = {
-      let view = UIActivityIndicatorView(style: .medium)
-      view.color = .white
-      view.startAnimating()
-      view.translatesAutoresizingMaskIntoConstraints = false
-      return view
+        let view = UIActivityIndicatorView(style: .medium)
+        view.color = .white
+        view.startAnimating()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
-        override func viewDidLoad() {
-            super.viewDidLoad()
-
-            view.backgroundColor = .background
-            setupViews()
-            setupLayouts()
-            makeServiceCall()
-        }
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        private func makeServiceCall() {
-            indicatorView.startAnimating()
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1)) { [self] in
-                indicatorView.stopAnimating()
-                if UserDefaults.standard.bool(forKey: "LOGGED_IN") {
-                    self.switchToMovieTableViewController()
-                } else {
-                    self.switchToAuthViewController()
-                }
+        view.backgroundColor = .background
+        setupViews()
+        setupLayouts()
+        makeServiceCall()
+    }
+    
+    // MARK: - Layout methods
+    
+    private func makeServiceCall() {
+        indicatorView.startAnimating()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1)) { [self] in
+            indicatorView.stopAnimating()
+            if UserDefaults.standard.bool(forKey: "LOGGED_IN") {
+                self.switchToMovieTableViewController()
+            } else {
+                self.switchToAuthViewController()
             }
         }
+    }
     
     func switchToMovieTableViewController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -59,13 +65,11 @@ final class SplashViewController: UIViewController {
     func setupViews() {
         view.addSubview(indicatorView)
     }
-
-        
-    func setupLayouts() {
-      NSLayoutConstraint.activate([
-        indicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        indicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-      ])
-    }
     
+    func setupLayouts() {
+        NSLayoutConstraint.activate([
+            indicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
 }

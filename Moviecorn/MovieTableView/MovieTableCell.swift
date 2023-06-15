@@ -11,6 +11,10 @@ final class MovieTableCell: UITableViewCell {
     
     static let reuseIdentifier = "MovieTableCell"
     
+//    func configure(image: UIImage?) {
+//        movieImageView.image = image
+//    }
+    
     // MARK: - Layout elements
     
     let movieTableCellView: UIView = {
@@ -108,4 +112,12 @@ final class MovieTableCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//    func setupCell(viewModel: MovieTableCellViewModel) {
+//        self.movieNameLabel.text = viewModel.title
+//        self.yearLabel.text = viewModel.year
+//        self.runtimeLabel.text = viewModel.runtime
+//        //self.movieImageView.sd_setImage(with: viewModel.image)
+//    }
+    
 }

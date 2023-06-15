@@ -7,14 +7,19 @@
 
 import UIKit
 
+
 final class MovieDescriptionViewController: UIViewController {
     
-//    var image: UIImage! {
-//            didSet {
-//                guard isViewLoaded else { return }
-//                movieSingleImageView.image = image
-//            }
-//        }
+//    private var image: UIImage?
+    
+    let networkDataFetcher = NetworkDataFetcher()
+    
+    //    var image: UIImage! {
+    //            didSet {
+    //                guard isViewLoaded else { return }
+    //                movieSingleImageView.image = image
+    //            }
+    //        }
     
     // MARK: - Layout elements
     
@@ -34,6 +39,7 @@ final class MovieDescriptionViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 40)
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -91,22 +97,30 @@ final class MovieDescriptionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        movieSingleImageView.image = image
-        
         initMovieDescriptionViewController()
+   //     test()
+}
+
+    func test() {
+    let urlString = "https://www.omdbapi.com/?apikey=fd2706fb&i=tt1375666"
+        networkDataFetcher.fetch(urlString: urlString) { (MovieDescriptionModel) in
+            self.movieNameLabel.text = MovieDescriptionModel?.movieName
+            self.descriptionLabel.text = MovieDescriptionModel?.plot
+            self.networkDataFetcher.loadImage(urlString: urlString) { image in
+                DispatchQueue.main.async {
+                    self.movieSingleImageView.image = image
+                }
+            }
+        }
     }
+  
     
     // MARK: - Layout methods
     
     @objc private func didTapBackButton() {
         
         dismiss(animated: true, completion: nil)
-//        guard let window = UIApplication.shared.windows.first else {
-//            assertionFailure("Invalid Configuration")
-//            return
-//        }
-//        let movieTableViewController = MovieTableViewController()
-//        window.rootViewController = movieTableViewController
+
     }
     
     @objc private func didTapLogoutButton() {
@@ -202,3 +216,7 @@ final class MovieDescriptionViewController: UIViewController {
         ])
     }
 }
+    
+
+
+
