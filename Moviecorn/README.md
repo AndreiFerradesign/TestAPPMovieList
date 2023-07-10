@@ -1,8 +1,4 @@
-#  Test App Movie List for Aston
-
-## Used stack
-
-UIKit, Programmatically UI, URLSession, UserDefaults
+##  Test App Movie List for Aston
 
 ## Description
 
@@ -16,4 +12,8 @@ To log in to the application, use the following data:
 
  - Username -> 1234
  - Password -> 1234
+
+## Used stack
+
+UIKit, Programmatically UI, URLSession, UserDefaults
  
