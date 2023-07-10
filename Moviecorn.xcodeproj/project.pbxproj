@@ -62,6 +62,7 @@
 		A329D89F2A51E0040082FC28 /* Backend+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Backend+StatusCode.swift"; sourceTree = "<group>"; };
 		A329D8A22A51E2A90082FC28 /* MovieSourceURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSourceURL.swift; sourceTree = "<group>"; };
 		A329D8A72A521D0C0082FC28 /* MovieDescriptionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDescriptionPresenter.swift; sourceTree = "<group>"; };
+		A3F5E19F2A5C77D600BB5812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +108,7 @@
 				A329A0682A2678750023CE35 /* Assets.xcassets */,
 				A329A06A2A2678750023CE35 /* LaunchScreen.storyboard */,
 				A329A06D2A2678750023CE35 /* Info.plist */,
+				A3F5E19F2A5C77D600BB5812 /* README.md */,
 			);
 			path = Moviecorn;
 			sourceTree = "<group>";
