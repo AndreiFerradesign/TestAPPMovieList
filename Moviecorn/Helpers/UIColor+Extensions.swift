@@ -8,5 +8,5 @@
 import UIKit
 
 extension UIColor {
-    static var background: UIColor {UIColor (named: "Background")!}
+    static var background: UIColor {UIColor (named: "Background") ?? UIColor.lightGray}
 }

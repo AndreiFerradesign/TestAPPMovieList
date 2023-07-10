@@ -10,23 +10,17 @@ import UIKit
 
 final class MovieDescriptionViewController: UIViewController {
     
-//    private var image: UIImage?
+    // MARK: - Properties
     
-    let networkDataFetcher = NetworkDataFetcher()
-    
-    //    var image: UIImage! {
-    //            didSet {
-    //                guard isViewLoaded else { return }
-    //                movieSingleImageView.image = image
-    //            }
-    //        }
+    var presenter: MovieDescriptionPresenterProtocol?
+    private var data: Movie?
+    private let networkService = NetworkService()
     
     // MARK: - Layout elements
     
-    private let movieSingleImageView: UIImageView = {
+    private var movieSingleImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "0")
-        imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,13 +34,14 @@ final class MovieDescriptionViewController: UIViewController {
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 40)
         label.numberOfLines = 2
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let aboutMovieLabel: UILabel = {
         let label = UILabel()
-        label.text = "О фильме"
+        label.text = "About movie"
         label.textAlignment = .center
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 16)
@@ -67,9 +62,8 @@ final class MovieDescriptionViewController: UIViewController {
     
     private let rectView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 15
         view.backgroundColor = .white
-        view.alpha = 0.9
+        view.alpha = 1
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -80,6 +74,7 @@ final class MovieDescriptionViewController: UIViewController {
                                            target: nil,
                                            action: #selector(didTapLogoutButton))
         button.tintColor = .red
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -88,7 +83,8 @@ final class MovieDescriptionViewController: UIViewController {
         let button = UIButton.systemButton(with: buttonImage!,
                                            target: nil,
                                            action: #selector(didTapBackButton))
-        button.tintColor = .white
+        button.tintColor = .green
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -97,30 +93,23 @@ final class MovieDescriptionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initMovieDescriptionViewController()
-   //     test()
-}
-
-    func test() {
-    let urlString = "https://www.omdbapi.com/?apikey=fd2706fb&i=tt1375666"
-        networkDataFetcher.fetch(urlString: urlString) { (MovieDescriptionModel) in
-            self.movieNameLabel.text = MovieDescriptionModel?.movieName
-            self.descriptionLabel.text = MovieDescriptionModel?.plot
-            self.networkDataFetcher.loadImage(urlString: urlString) { image in
-                DispatchQueue.main.async {
-                    self.movieSingleImageView.image = image
-                }
-            }
-        }
+        
+        initMovieDescriptionView()
     }
-  
     
-    // MARK: - Layout methods
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.isHidden = true
+        
+        presenter?.getData()
+        updateDescription()
+    }
+    
+    // MARK: - Actions
     
     @objc private func didTapBackButton() {
-        
-        dismiss(animated: true, completion: nil)
-
+        presenter?.tapBack()
     }
     
     @objc private func didTapLogoutButton() {
@@ -134,7 +123,7 @@ final class MovieDescriptionViewController: UIViewController {
             style: .default,
             handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.logOut()
+                presenter?.tapLogOut()
             }))
         alert.addAction(UIAlertAction(
             title: "Нет",
@@ -142,51 +131,43 @@ final class MovieDescriptionViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
-    private func logOut() {
+    // MARK: - Private methods
+    
+    private func updateDescription() {
         
-        UserDefaults.standard.set(false, forKey: "LOGGED_IN")
-        
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid Configuration")
-            return
-        }
-        let authViewController = AuthViewController()
-        window.rootViewController = authViewController
+        self.movieNameLabel.text = data?.movieName
+        self.descriptionLabel.text = data?.plot
+        fetchImage(imageLink: data?.poster)
     }
     
-    private func initMovieDescriptionViewController() {
+    private func fetchImage(imageLink: String?) {
+        guard let url = URL(string: imageLink ?? String()) else { return }
+        networkService.fetchImageData(from: url) { [weak self] image in
+            guard let self = self else { return }
+            self.movieSingleImageView.image = image
+        }
+    }
+    
+    private func initMovieDescriptionView() {
         
         view.backgroundColor = .background
         
-        movieSingleImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(movieSingleImageView)
-        
-        rectView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(rectView)
-        
-        movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(movieNameLabel)
-        
-        aboutMovieLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(aboutMovieLabel)
-        
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descriptionLabel)
-        
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
-        
-        backButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(backButton)
         
-        
         NSLayoutConstraint.activate([
+            
             movieSingleImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             movieSingleImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             movieSingleImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             movieSingleImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            rectView.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -450),
+            rectView.topAnchor.constraint(equalTo: movieSingleImageView.bottomAnchor, constant: 0),
             rectView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
             rectView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             rectView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
@@ -213,10 +194,17 @@ final class MovieDescriptionViewController: UIViewController {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             backButton.widthAnchor.constraint(equalToConstant: 30),
             backButton.heightAnchor.constraint(equalToConstant: 30),
+            
         ])
     }
 }
+
+// MARK: - MovieDescriptionViewProtocol
+
+extension MovieDescriptionViewController: MovieDescriptionViewProtocol {
     
-
-
+    func setData(data: Movie?) {
+        self.data = data
+    }
+}
 

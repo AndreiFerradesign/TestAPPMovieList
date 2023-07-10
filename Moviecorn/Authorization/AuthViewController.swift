@@ -9,6 +9,12 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    var presenter: AuthPresenterProtocol?
+    internal var isCorrectLogin: Bool = true
+    internal var isCorrectPassword: Bool = true
+    
     // MARK: - Layout elements
     
     private var authLabel: UILabel = {
@@ -17,6 +23,7 @@ final class AuthViewController: UIViewController {
         authLabel.textColor = .white
         authLabel.font = UIFont.systemFont(ofSize: 28)
         authLabel.textAlignment = .center
+        authLabel.translatesAutoresizingMaskIntoConstraints = false
         return authLabel
     }()
     
@@ -24,8 +31,10 @@ final class AuthViewController: UIViewController {
         let errorLabel = UILabel()
         errorLabel.text = "Ошибка ввода"
         errorLabel.textColor = .red
-        errorLabel.font = UIFont.systemFont(ofSize: 16)
+        errorLabel.font = UIFont.systemFont(ofSize: 18)
         errorLabel.textAlignment = .center
+        errorLabel.isHidden = true
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
         return errorLabel
     }()
     
@@ -40,6 +49,7 @@ final class AuthViewController: UIViewController {
         usernameTextField.font = UIFont.systemFont(ofSize: 15)
         usernameTextField.clearButtonMode = UITextField.ViewMode.whileEditing
         usernameTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        usernameTextField.translatesAutoresizingMaskIntoConstraints = false
         return usernameTextField
     }()
     
@@ -49,21 +59,25 @@ final class AuthViewController: UIViewController {
         passwordTextField.borderStyle = UITextField.BorderStyle.roundedRect
         passwordTextField.layer.cornerRadius = 8.0
         passwordTextField.layer.masksToBounds = true
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.autocorrectionType = UITextAutocorrectionType.no
         passwordTextField.keyboardType = UIKeyboardType.default
         passwordTextField.font = UIFont.systemFont(ofSize: 15)
         passwordTextField.clearButtonMode = UITextField.ViewMode.whileEditing
         passwordTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         return passwordTextField
     }()
     
     lazy var button: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("Войти", for: .normal)
         button.backgroundColor = .white
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.layer.cornerRadius = 8
         button.setTitleColor(.background, for: .normal)
         button.addTarget(self, action: #selector(didTapLoginButton(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -71,37 +85,27 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        errorLabel.isHidden = true
+        
+        textFieldDelegate()
         initAuthViewController()
+        
     }
     
     // MARK: - Layout methods
     
-    func clearTextField (textField: UITextField) {
-        textField.text = ""
-    }
     
     private func initAuthViewController() {
         
         view.backgroundColor = .background
         
-        authLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(authLabel)
-        
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(errorLabel)
-        
-        usernameTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(usernameTextField)
-        
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(passwordTextField)
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(button)
         
-        
         NSLayoutConstraint.activate([
+            
             authLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             authLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             authLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
@@ -125,43 +129,68 @@ final class AuthViewController: UIViewController {
             button.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             button.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 70),
             button.widthAnchor.constraint(equalToConstant: 300),
-            button.heightAnchor.constraint(equalToConstant: 40),
+            button.heightAnchor.constraint(equalToConstant: 40)
+            
         ])
     }
     
     // MARK: - Actions
     
     @objc private func didTapLoginButton(_ sender: UIButton) {
-        
-        let usernameText: String = usernameTextField.text ?? ""
-        let passwordText: String = passwordTextField.text ?? ""
-        
-        if  passwordText == password && usernameText == username {
-            
-            guard let window = UIApplication.shared.windows.first else {
-                assertionFailure("Invalid Configuration")
-                return
-            }
-            
-            let movieTableViewController = MovieTableViewController()
-            window.rootViewController = movieTableViewController
-            
-            UserDefaults.standard.set(true, forKey: "LOGGED_IN")
-            
-        } else {
-            
-            let alert = UIAlertController(
-                title: "Что то не так!",
-                message: "Попробуйте еще раз",
-                preferredStyle: .alert)
-            alert.addAction(UIAlertAction(
-                title: "OK",
-                style: .default))
-            self.present(alert, animated: true)
-            
-            clearTextField(textField: usernameTextField)
-            clearTextField(textField: passwordTextField)
+        presenter?.checkValidation(
+            username: usernameTextField.text ?? String(),
+            password: passwordTextField.text ?? String()
+        )
+    }
+}
+
+// MARK: - AuthViewControllerProtocol
+
+extension AuthViewController: AuthViewControllerProtocol {
+    
+    func success() {
+        presenter?.userLogIn()
+    }
+    
+    func error(message: String) {
+        errorLabel.text = message
+        errorLabel.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(2)) { [self] in
+            errorLabel.isHidden = true
         }
     }
 }
+
+// MARK: - UITextFieldDelegate
+
+extension AuthViewController: UITextFieldDelegate {
+    
+    private func textFieldDelegate() {
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case usernameTextField:
+            textField.resignFirstResponder()
+            passwordTextField.becomeFirstResponder()
+        case passwordTextField:
+            textField.resignFirstResponder()
+            presenter?.checkValidation(
+                username: usernameTextField.text ?? String(),
+                password: passwordTextField.text ?? String()
+            )
+        default:
+            break
+        }
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+    }
+}
+
 
