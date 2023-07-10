@@ -8,7 +8,7 @@ The application consists of three screens:
 - A table with a loaded list of movies,
 - Detailed description screen of the selected movie.
 
-To log in to the application, use the following data: 
+To log in to the application, use: 
 
  - Username -> 1234
  - Password -> 1234
