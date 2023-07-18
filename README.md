@@ -1,4 +1,4 @@
-##  Test App Movie List for Aston
+##  Test App Movie List
 
 ![AuthorizationScreen](https://github.com/AndreiFerradesign/TestAPPforAston/blob/main/MovieListApp_1.png)
 ![MainScreen](https://github.com/AndreiFerradesign/TestAPPforAston/blob/main/MovieListApp_2.png)
